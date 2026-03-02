@@ -9,7 +9,7 @@ namespace Library_Management.Services
     /// Thể hiện: Implement IManageable (Polymorphism), sử dụng FileStorage (Encapsulation)
     /// Lưu ý: Interface IManageable do TV2 viết — cần copy vào project trước.
     /// </summary>
-    public class ReaderService
+    public class ReaderService : IManageable<Reader>
     {
         // ─── Fields ───────────────────────────────────────────────────────
         private List<Reader> _readers;
