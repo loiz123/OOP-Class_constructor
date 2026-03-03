@@ -21,112 +21,35 @@ https://docs.google.com/document/d/1FpFU-Zol2SmEm832tv-UKfhWURjXS9Z5/edit?usp=sh
 
 
 
-1️⃣ Encapsulation – Tính đóng gói
-📌 Thể hiện ở đâu?
-✅ Person, Reader, Librarian
+Các nguyên tắc OOP được áp dụng
+1. Encapsulation (Đóng gói)
 
-Các fields như _id, _name, _phone, _borrowedCount đều để private hoặc protected
+Tất cả các thuộc tính trong các lớp như Person, Reader, Librarian, Book, BorrowRecord, Fine đều được khai báo private hoặc protected và truy cập thông qua property hoặc phương thức công khai.
 
-Không cho truy cập trực tiếp từ bên ngoài
+Các lớp như Book (Checkout, Return), BorrowRecord (CompleteReturn, IsOverdue), Fine (Calculate, MarkAsPaid) và Reader (IncreaseBorrowCount, DecreaseBorrowCount) đều ẩn toàn bộ logic xử lý bên trong class. Điều này giúp đảm bảo tính toàn vẹn dữ liệu và tránh việc thay đổi trạng thái trực tiếp từ bên ngoài.
 
-Truy cập thông qua property hoặc method
+Các lớp Service như ReaderService, BookService, BorrowService cũng quản lý danh sách đối tượng thông qua các phương thức công khai thay vì cho truy cập trực tiếp vào danh sách nội bộ.
 
-Ví dụ:
+2. Abstraction (Trừu tượng)
 
-IncreaseBorrowCount()
+Lớp Person được khai báo là abstract class, không thể tạo đối tượng trực tiếp mà chỉ dùng làm lớp cơ sở cho Reader và Librarian. Lớp này định nghĩa các phương thức trừu tượng như GetInfo() và GetRole() để lớp con bắt buộc phải triển khai.
 
-DecreaseBorrowCount()
+Interface IManageable<T> định nghĩa các phương thức chung như Add, Remove, FindById, GetAll, Update. Các lớp BookService và BorrowService triển khai interface này, giúp ẩn chi tiết cài đặt bên trong và chỉ cung cấp hợp đồng sử dụng.
 
-Checkout() trong Book
+3. Inheritance (Kế thừa)
 
-CompleteReturn() trong BorrowRecord
+Hai lớp Reader và Librarian kế thừa từ lớp Person, tái sử dụng toàn bộ các thuộc tính chung như _id, _name, _phone, _email, _address.
 
-👉 Logic xử lý được đặt bên trong class, bên ngoài không thể tự ý thay đổi dữ liệu.
+Lớp con mở rộng thêm các thuộc tính riêng:
 
-✅ Book
+Reader: _maxBorrow, _borrowedCount, _readerType
 
-_availableQuantity không cho sửa trực tiếp
+Librarian: _staffCode, _department, _hireDate
 
-Muốn mượn phải gọi Checkout()
+Việc kế thừa giúp giảm lặp code và xây dựng cấu trúc phân cấp rõ ràng trong hệ thống.
 
-Muốn trả phải gọi Return()
+4. Polymorphism (Đa hình)
 
-👉 Đảm bảo số lượng sách không bị thay đổi sai.
+Các phương thức trừu tượng GetInfo() và GetRole() được override khác nhau trong Reader và Librarian, thể hiện đa hình thông qua method overriding.
 
-✅ BorrowRecord
-
-Trạng thái _status chỉ thay đổi thông qua CompleteReturn()
-
-Không cho bên ngoài chỉnh status tùy ý
-
-2️⃣ Abstraction – Tính trừu tượng
-📌 Thể hiện ở đâu?
-✅ Person là abstract class
-abstract class Person
-
-Không thể tạo object trực tiếp từ Person
-
-Bắt buộc lớp con phải override:
-
-GetInfo()
-
-GetRole()
-
-👉 Đây là trừu tượng hóa: định nghĩa khung chung, không quan tâm chi tiết.
-
-✅ IManageable<T> là interface
-interface IManageable<T>
-
-Chỉ định nghĩa:
-
-Add()
-
-Remove()
-
-FindById()
-
-GetAll()
-
-Update()
-
-👉 Không quan tâm cách cài đặt bên trong.
-
-BookService và BorrowService chỉ cần implement lại.
-
-3️⃣ Inheritance – Tính kế thừa
-📌 Thể hiện ở đâu?
-✅ Reader và Librarian kế thừa Person
-class Reader : Person
-class Librarian : Person
-
-Reader và Librarian:
-
-Tự động có _id, _name, _phone, _email
-
-Tái sử dụng method chung
-
-👉 Không cần viết lại từ đầu.
-
-4️⃣ Polymorphism – Tính đa hình
-📌 Thể hiện ở đâu?
-✅ Override phương thức
-
-Trong Person:
-
-public abstract string GetInfo();
-
-Trong Reader:
-
-public override string GetInfo()
-
-Trong Librarian:
-
-public override string GetInfo()
-
-Cùng tên phương thức, nhưng hành vi khác nhau.
-
-✅ Polymorphism qua Interface
-
-BookService và BorrowService đều:
-
-implement IManageable<T>
+Ngoài ra, các lớp BookService và BorrowService cùng triển khai interface IManageable<T>, cho phép sử dụng thông qua kiểu interface mà không cần quan tâm lớp cụ thể bên dưới. Đây là đa hình thông qua interface.>
