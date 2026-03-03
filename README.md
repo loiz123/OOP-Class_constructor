@@ -18,6 +18,9 @@ Sơ đồ quan hệ cơ bản
 
 Xem phân công nhiệm vụ ở đây
 https://docs.google.com/document/d/1FpFU-Zol2SmEm832tv-UKfhWURjXS9Z5/edit?usp=sharing&ouid=106548223410039392007&rtpof=true&sd=true
+
+
+
 1️⃣ Encapsulation – Tính đóng gói
 📌 Thể hiện ở đâu?
 ✅ Person, Reader, Librarian
