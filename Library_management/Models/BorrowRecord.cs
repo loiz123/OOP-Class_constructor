@@ -1,10 +1,11 @@
+using Library_Management.Models;
+
 public class BorrowRecord
 {
     public int IdRecord { get; set; }
 
-    public Sach Sach { get; set; }
+    public Book Book{ get; set; }
 
-    public string TenNguoiMuon { get; set; }
 
     public DateTime BorrowDate { get; set; }
 
@@ -35,11 +36,11 @@ public class BorrowRecord
         ReturnDate = DateTime.Now;
         Status = BorrowStatus.Returned;
 
-        Sach.TinhTrang = "Con";
+        Book.AvailableQuantity++;
     }
 
     public string GetInfo()
     {
-        return $"{IdRecord} - {Sach.TenSach} - {TenNguoiMuon} - {Status}";
+        return $"{IdRecord} - {Book.Title} - {Book.AvailableQuantity} - {Status}";
     }
 }
