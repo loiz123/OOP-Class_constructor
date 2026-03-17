@@ -14,10 +14,17 @@ namespace Library_Management.Services
         private List<Book> _books;
 
         // ─── Constructor ──────────────────────────────────────────────────
-        public BookService()
-        {
-            _books = new List<Book>();
-        }
+        private readonly FileStorage<Book> _storage;
+private const string FileName = "books.json";
+
+public BookService()
+{
+    _storage = new FileStorage<Book>();
+    _books = _storage.Load(FileName); // Tự động đọc dữ liệu khi bật chương trình
+}
+
+// Trong hàm Add, Remove, Update, sau khi thay đổi List _books xong thì gọi:
+// _storage.Save(FileName, _books);
 
         // ─── CRUD Methods ─────────────────────────────────────────────────
         /// <summary>Thêm sách mới.</summary>
