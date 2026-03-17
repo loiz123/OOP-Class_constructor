@@ -1,46 +1,43 @@
+﻿using System;
 using Library_Management.Models;
 
-public class BorrowRecord
+namespace Library_Management.Models
 {
-    public int IdRecord { get; set; }
-
-    public Book Book{ get; set; }
-
-
-    public DateTime BorrowDate { get; set; }
-
-    public DateTime DueDate { get; set; }
-
-    public DateTime? ReturnDate { get; set; }
-
-    public BorrowStatus Status { get; set; }
-
-    public bool IsOverdue()
+    public class BorrowRecord
     {
-        if (Status == BorrowStatus.Returned)
-            return false;
+        public string IdRecord { get; set; } = string.Empty;
+        public Book Book { get; set; }
+        public Reader Reader { get; set; }       // Đã bổ sung Reader
+        public Librarian Librarian { get; set; } // Đã bổ sung Librarian
 
-        return DateTime.Now > DueDate;
-    }
+        public DateTime BorrowDate { get; set; }
+        public DateTime DueDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
+        public BorrowStatus Status { get; set; }
 
-    public int GetOverdueDays()
-    {
-        if (!IsOverdue())
-            return 0;
+        public bool IsOverdue()
+        {
+            if (Status == BorrowStatus.Returned) return false;
+            return DateTime.Now > DueDate;
+        }
 
-        return (DateTime.Now - DueDate).Days;
-    }
+        public int GetOverdueDays()
+        {
+            if (!IsOverdue()) return 0;
+            return (DateTime.Now - DueDate).Days;
+        }
 
-    public void CompleteReturn()
-    {
-        ReturnDate = DateTime.Now;
-        Status = BorrowStatus.Returned;
+        public void CompleteReturn()
+        {
+            ReturnDate = DateTime.Now;
+            Status = BorrowStatus.Returned;
+            Book.Return();                // Sử dụng hàm Return của Book
+            Reader.DecreaseBorrowCount(); // Giảm số lượng sách độc giả đang mượn
+        }
 
-        Book.AvailableQuantity++;
-    }
-
-    public string GetInfo()
-    {
-        return $"{IdRecord} - {Book.Title} - {Book.AvailableQuantity} - {Status}";
+        public string GetInfo()
+        {
+            return $"[{IdRecord}] Độc giả: {Reader?.Name} - Sách: {Book?.Title} - Trạng thái: {Status}";
+        }
     }
 }

@@ -130,5 +130,24 @@ namespace Library_Management.Services
         {
             _storage.BackupFile(FileName);
         }
+        public List<Reader> SearchByName(string name)
+        {
+            List<Reader> result = new List<Reader>();
+            foreach (var r in _readers)
+            {
+                if (r.Name.ToLower().Contains(name.ToLower())) result.Add(r);
+            }
+            return result;
+        }
+
+        public List<Reader> GetBorrowingReaders()
+        {
+            List<Reader> result = new List<Reader>();
+            foreach (var r in _readers)
+            {
+                if (r.BorrowedCount > 0) result.Add(r);
+            }
+            return result;
+        }
     }
 }
