@@ -1,153 +1,134 @@
 ﻿using System;
 using System.Collections.Generic;
 using Library_Management.Models;
+using Library_Management.Data; // Cần thiết để gọi FileStorage
 
 namespace Library_Management.Services
 {
     /// <summary>
-    /// Quản lý danh sách độc giả.
-    /// Thể hiện: Implement IManageable (Polymorphism), sử dụng FileStorage (Encapsulation)
-    /// Lưu ý: Interface IManageable do TV2 viết — cần copy vào project trước.
+    /// Quản lý danh sách độc giả và kết nối lưu trữ file.
     /// </summary>
     public class ReaderService : IManageable<Reader>
     {
         // ─── Fields ───────────────────────────────────────────────────────
         private List<Reader> _readers;
+        private readonly FileStorage<Reader> _storage;
+        private const string FileName = "readers.json";
 
         // ─── Constructor ──────────────────────────────────────────────────
         public ReaderService()
         {
-            _readers = new List<Reader>();
+            // Khởi tạo đối tượng lưu trữ Generic
+            _storage = new FileStorage<Reader>();
+
+            // Tải dữ liệu từ file JSON ngay khi khởi tạo
+            // Nếu file chưa tồn tại, FileStorage.Load sẽ trả về list rỗng
+            _readers = _storage.Load(FileName);
+
+            if (_readers == null)
+            {
+                _readers = new List<Reader>();
+            }
         }
 
         // ─── CRUD Methods ─────────────────────────────────────────────────
-        /// <summary>Thêm độc giả mới.</summary>
+
+        /// <summary>Thêm độc giả và lưu vào file.</summary>
         public void Add(Reader reader)
         {
             if (reader == null)
-                throw new ArgumentNullException("reader", "Độc giả không được null.");
+            {
+                throw new ArgumentNullException("reader");
+            }
 
             if (FindById(reader.Id) != null)
-                throw new InvalidOperationException("ID độc giả đã tồn tại: " + reader.Id);
+            {
+                Console.WriteLine("[LỖI] ID độc giả đã tồn tại.");
+                return;
+            }
 
             _readers.Add(reader);
-            Console.WriteLine("[OK] Đã thêm độc giả: " + reader.Name);
+
+            // Gọi phương thức Save của FileStorage để ghi xuống đĩa
+            _storage.Save(FileName, _readers);
+            Console.WriteLine("[OK] Đã thêm và lưu dữ liệu vào JSON.");
         }
 
-        /// <summary>Xóa độc giả theo ID.</summary>
+        /// <summary>Xóa độc giả và cập nhật lại file.</summary>
         public void Remove(string id)
         {
             Reader reader = FindById(id);
-            if (reader == null)
-            {
-                Console.WriteLine("[LỖI] Không tìm thấy độc giả ID: " + id);
-                return;
-            }
 
-            if (reader.BorrowedCount > 0)
+            // Chỉ xóa nếu tìm thấy và độc giả không còn nợ sách
+            if (reader != null && reader.BorrowedCount == 0)
             {
-                Console.WriteLine("[LỖI] Không thể xóa — độc giả đang mượn "
-                                  + reader.BorrowedCount + " cuốn sách.");
-                return;
-            }
+                _readers.Remove(reader);
 
-            _readers.Remove(reader);
-            Console.WriteLine("[OK] Đã xóa độc giả: " + reader.Name);
+                // Cập nhật lại file sau khi danh sách thay đổi
+                _storage.Save(FileName, _readers);
+                Console.WriteLine("[OK] Đã xóa và cập nhật file lưu trữ.");
+            }
+            else if (reader != null && reader.BorrowedCount > 0)
+            {
+                Console.WriteLine("[LỖI] Không thể xóa độc giả đang mượn sách.");
+            }
         }
 
-        /// <summary>Tìm độc giả theo ID.</summary>
+        /// <summary>Cập nhật thông tin và lưu file.</summary>
+        public void Update(Reader updatedReader)
+        {
+            Reader existing = FindById(updatedReader.Id);
+            if (existing != null)
+            {
+                existing.Name = updatedReader.Name;
+                existing.Phone = updatedReader.Phone;
+                existing.Email = updatedReader.Email;
+                existing.Address = updatedReader.Address;
+                existing.ReaderType = updatedReader.ReaderType;
+                existing.MaxBorrow = updatedReader.MaxBorrow;
+
+                // Lưu các thay đổi vào file JSON
+                _storage.Save(FileName, _readers);
+                Console.WriteLine("[OK] Đã cập nhật thông tin và lưu file.");
+            }
+        }
+
+        // ─── Helper Methods ───────────────────────────────────────────────
+
         public Reader FindById(string id)
         {
-            for (int i = 0; i < _readers.Count; i++)
+            foreach (Reader r in _readers)
             {
-                if (_readers[i].Id == id)
-                    return _readers[i];
+                if (r.Id == id)
+                {
+                    return r;
+                }
             }
             return null;
         }
 
-        /// <summary>Lấy toàn bộ danh sách độc giả.</summary>
         public List<Reader> GetAll()
         {
             return _readers;
         }
 
-        /// <summary>Cập nhật thông tin độc giả.</summary>
-        public void Update(Reader updatedReader)
-        {
-            Reader existing = FindById(updatedReader.Id);
-            if (existing == null)
-            {
-                Console.WriteLine("[LỖI] Không tìm thấy độc giả ID: " + updatedReader.Id);
-                return;
-            }
-
-            existing.Name = updatedReader.Name;
-            existing.Phone = updatedReader.Phone;
-            existing.Email = updatedReader.Email;
-            existing.Address = updatedReader.Address;
-            existing.ReaderType = updatedReader.ReaderType;
-            existing.MaxBorrow = updatedReader.MaxBorrow;
-
-            Console.WriteLine("[OK] Đã cập nhật độc giả: " + existing.Name);
-        }
-
-        // ─── Search Methods ────────────────────────────────────────────────
-        /// <summary>Tìm kiếm độc giả theo tên (không phân biệt hoa/thường).</summary>
-        public List<Reader> SearchByName(string name)
-        {
-            List<Reader> result = new List<Reader>();
-            string keyword = name.ToLower();
-
-            for (int i = 0; i < _readers.Count; i++)
-            {
-                if (_readers[i].Name.ToLower().Contains(keyword))
-                    result.Add(_readers[i]);
-            }
-            return result;
-        }
-
-        /// <summary>Lấy danh sách độc giả đang mượn sách.</summary>
-        public List<Reader> GetBorrowingReaders()
-        {
-            List<Reader> result = new List<Reader>();
-            for (int i = 0; i < _readers.Count; i++)
-            {
-                if (_readers[i].BorrowedCount > 0)
-                    result.Add(_readers[i]);
-            }
-            return result;
-        }
-
-        // ─── Display Methods ───────────────────────────────────────────────
-        /// <summary>In danh sách độc giả ra console.</summary>
         public void PrintAll()
         {
             Console.WriteLine("══════════════════════════════════════");
-            Console.WriteLine("        DANH SÁCH ĐỘC GIẢ            ");
+            Console.WriteLine($"   DANH SÁCH ĐỘC GIẢ ({_readers.Count})");
             Console.WriteLine("══════════════════════════════════════");
 
-            if (_readers.Count == 0)
+            foreach (Reader r in _readers)
             {
-                Console.WriteLine("  (Chưa có độc giả nào)");
-            }
-            else
-            {
-                for (int i = 0; i < _readers.Count; i++)
-                {
-                    Console.WriteLine(i + 1 + ". " + _readers[i].GetBasicInfo()
-                                      + " | Đang mượn: " + _readers[i].BorrowedCount
-                                      + "/" + _readers[i].MaxBorrow);
-                }
+                Console.WriteLine($"{r.Id} | {r.Name} | Mượn: {r.BorrowedCount}/{r.MaxBorrow}");
             }
             Console.WriteLine("══════════════════════════════════════");
-            Console.WriteLine("Tổng: " + _readers.Count + " độc giả");
         }
 
-        /// <summary>Load danh sách từ bên ngoài (dùng khi FileStorage load xong).</summary>
-        public void SetReaders(List<Reader> readers)
+        /// <summary>Tạo bản sao lưu dữ liệu hiện tại.</summary>
+        public void Backup()
         {
-            _readers = readers;
+            _storage.BackupFile(FileName);
         }
     }
 }
