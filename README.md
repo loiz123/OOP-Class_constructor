@@ -10,10 +10,10 @@ Hệ thống quản lý mượn/trả sách thư viện viết bằng **C#**, á
 
 | Thành viên | Phụ trách | Branch |
 |---|---|---|
-| **Đại Phát** | Person, Reader, Librarian, ReaderService | `feature/dai-phat` |
-| **Ngọc Thiện** | IManageable\<T\>, Book, BookService | `feature/ngoc-thien` |
-| **Định Quốc** | BorrowStatus, BorrowRecord, Fine, BorrowService | `feature/dinh-quoc` |
-| **Nam Anh** | FileStorage\<T\>, MenuController, Program.cs | `feature/nam-anh` |
+| **Đại Phát** | Person, Reader, Librarian, ReaderService | `feature/loiz123` |
+| **Ngọc Thiện** | IManageable\<T\>, Book, BookService | `feature/HNTRHunter` |
+| **Định Quốc** | BorrowStatus, BorrowRecord, Fine, BorrowService | `dinhquoc03032626` |
+| **Nam Anh** | FileStorage\<T\>, MenuController, Program.cs | `feature/nvm4nh` |
 
 ---
 
