@@ -12,7 +12,7 @@ Hệ thống quản lý mượn/trả sách thư viện viết bằng **C#**, á
 |---|---|---|
 | **Đại Phát** | Person, Reader, Librarian, ReaderService | `feature/loiz123` |
 | **Ngọc Thiện** | IManageable\<T\>, Book, BookService | `feature/HNTRHunter` |
-| **Định Quốc** | BorrowStatus, BorrowRecord, Fine, BorrowService | `dinhquoc03032626` |
+| **Định Quốc** | BorrowStatus, BorrowRecord, Fine, BorrowService | `feature/dinhquoc03032626` |
 | **Nam Anh** | FileStorage\<T\>, MenuController, Program.cs | `feature/nvm4nh` |
 
 ---
