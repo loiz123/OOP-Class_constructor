@@ -17,8 +17,6 @@ namespace Library_Management.Services
             _books = new List<Book>();
         }
 
-        // --- CÁC HÀM TỪ INTERFACE IManageable<Book> ---
-
         public void Add(Book item)
         {
             if (FindById(item.BookId) != null)
@@ -32,7 +30,7 @@ namespace Library_Management.Services
 
         public void Remove(string id)
         {
-            Book target = FindById(id);
+            Book? target = FindById(id);
             if (target == null)
             {
                 Console.WriteLine($"Không tìm thấy sách với ID '{id}'.");
@@ -42,7 +40,7 @@ namespace Library_Management.Services
             Console.WriteLine($"Đã xóa sách: {target.Title}");
         }
 
-        public Book FindById(string id)
+        public Book? FindById(string id)
         {
             for (int i = 0; i < _books.Count; i++)
             {
@@ -70,8 +68,6 @@ namespace Library_Management.Services
             }
             Console.WriteLine($"Không tìm thấy sách với ID '{updated.BookId}'.");
         }
-
-        // --- CÁC HÀM TÌM KIẾM RIÊNG THEO YÊU CẦU ---
 
         public List<Book> SearchByTitle(string keyword)
         {
