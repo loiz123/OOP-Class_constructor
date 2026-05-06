@@ -1,4 +1,5 @@
 using System;
+using Library_Management.Models;
 
 namespace Library_Management.Models
 {
@@ -7,39 +8,59 @@ namespace Library_Management.Models
     /// </summary>
     public class Fine
     {
-        public string FineId { get; set; }
-        public BorrowRecord BorrowRecord { get; set; }
-        public double Amount { get; set; }
-        public bool IsPaid { get; set; }
+        private string _fineId;
+        private BorrowRecord _borrowRecord;
+        private double _amount;
+        private bool _isPaid;
 
-        public Fine(BorrowRecord record)
+        public Fine(BorrowRecord borrowRecord)
         {
-            if (record == null)
-                throw new ArgumentNullException(nameof(record), "BorrowRecord không được null");
+            _fineId = Guid.NewGuid().ToString();
 
-            FineId = Guid.NewGuid().ToString();
-            BorrowRecord = record;
-            Amount = 0;
-            IsPaid = false;
+            _borrowRecord = borrowRecord
+                ?? throw new ArgumentNullException(nameof(borrowRecord));
+
+            _amount = 0;
+            _isPaid = false;
         }
 
+        // ===== Properties =====
+        public string FineId => _fineId;
+        public BorrowRecord BorrowRecord => _borrowRecord;
+        public double Amount => _amount;
+        public bool IsPaid => _isPaid;
+
+        // ===== Logic =====
         public void Calculate()
         {
-            int daysLate = BorrowRecord.GetOverdueDays();
-            if (daysLate > 0)
+            if (_borrowRecord == null)
+                throw new InvalidOperationException("BorrowRecord không tồn tại.");
+
+            int daysLate = _borrowRecord.GetOverdueDays();
+
+            if (daysLate <= 0)
             {
-                Amount = daysLate * 5000;
+                _amount = 0;
+                return;
+            }
+
+            _amount = daysLate * 5000;
+
+            // chống tiền âm (safe guard)
+            if (_amount < 0)
+            {
+                _amount = 0;
             }
         }
 
         public void MarkAsPaid()
         {
-            IsPaid = true;
+            _isPaid = true;
         }
 
         public string GetInfo()
         {
-            return $"FineId: {FineId} | Amount: {Amount} | Paid: {IsPaid}";
+            return $"FineId: {_fineId} | Amount: {_amount} | Paid: {_isPaid}";
         }
     }
 }
