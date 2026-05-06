@@ -4,9 +4,6 @@ using Library_Management.Models;
 
 namespace Library_Management.Services
 {
-    /// <summary>
-    /// Service xử lý mượn/trả sách (Business Logic)
-    /// </summary>
     public class BorrowService : IManageable<BorrowRecord>
     {
         private List<BorrowRecord> _records = new List<BorrowRecord>();
@@ -21,7 +18,7 @@ namespace Library_Management.Services
             _bookService = bookService;
         }
 
-        // ================= CRUD =================
+        // ===== CRUD =====
 
         public void Add(BorrowRecord item)
         {
@@ -63,7 +60,7 @@ namespace Library_Management.Services
             }
         }
 
-        // ================= BUSINESS LOGIC =================
+        // ===== BUSINESS LOGIC =====
 
         public void BorrowBook(string readerId, string bookId, Librarian librarian)
         {
@@ -153,6 +150,23 @@ namespace Library_Management.Services
             {
                 if (!_fines[i].IsPaid)
                     result.Add(_fines[i]);
+            }
+
+            return result;
+        }
+
+        // ===== NEW METHOD (yêu cầu của Phát) =====
+        public List<BorrowRecord> GetRecordsByReader(string readerId)
+        {
+            if (string.IsNullOrWhiteSpace(readerId))
+                throw new ArgumentException("readerId không hợp lệ");
+
+            List<BorrowRecord> result = new List<BorrowRecord>();
+
+            for (int i = 0; i < _records.Count; i++)
+            {
+                if (_records[i].Reader.Id == readerId)
+                    result.Add(_records[i]);
             }
 
             return result;

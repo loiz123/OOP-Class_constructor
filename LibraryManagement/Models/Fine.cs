@@ -14,6 +14,9 @@ namespace Library_Management.Models
 
         public Fine(BorrowRecord record)
         {
+            if (record == null)
+                throw new ArgumentNullException(nameof(record), "BorrowRecord không được null");
+
             FineId = Guid.NewGuid().ToString();
             BorrowRecord = record;
             Amount = 0;

@@ -7,44 +7,111 @@ namespace Library_Management.Models
     /// </summary>
     public class BorrowRecord
     {
-        public string RecordId { get; set; }
+       // ===== PRIVATE FIELDS =====
+private string _recordId;
 
-        public required Reader Reader { get; set; }
-        public required Book Book { get; set; }
-        public required Librarian Librarian { get; set; }
+private Reader _reader = null!;
+private Book _book = null!;
+private Librarian _librarian = null!;
 
-        public DateTime BorrowDate { get; set; }
-        public DateTime DueDate { get; set; }
-        public DateTime? ReturnDate { get; set; }
+private DateTime _borrowDate;
+private DateTime _dueDate;
+private DateTime? _returnDate;
 
-        public BorrowStatus Status { get; set; }
-
+private BorrowStatus _status;
+        // ===== CONSTRUCTOR (giữ để không lỗi BorrowService) =====
         public BorrowRecord()
         {
-            RecordId = Guid.NewGuid().ToString();
-            Status = BorrowStatus.Borrowing;
+            _recordId = Guid.NewGuid().ToString();
+            _status = BorrowStatus.Borrowing;
         }
+
+        // ===== PROPERTIES =====
+        public string RecordId
+        {
+            get { return _recordId; }
+            set { _recordId = value; }
+        }
+
+        public Reader Reader
+        {
+            get { return _reader; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(Reader));
+                _reader = value;
+            }
+        }
+
+        public Book Book
+        {
+            get { return _book; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(Book));
+                _book = value;
+            }
+        }
+
+        public Librarian Librarian
+        {
+            get { return _librarian; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(Librarian));
+                _librarian = value;
+            }
+        }
+
+        public DateTime BorrowDate
+        {
+            get { return _borrowDate; }
+            set { _borrowDate = value; }
+        }
+
+        public DateTime DueDate
+        {
+            get { return _dueDate; }
+            set { _dueDate = value; }
+        }
+
+        public DateTime? ReturnDate
+        {
+            get { return _returnDate; }
+            set { _returnDate = value; }
+        }
+
+        public BorrowStatus Status
+        {
+            get { return _status; }
+            set { _status = value; }
+        }
+
+        // ===== METHODS =====
 
         public bool IsOverdue()
         {
-            return Status == BorrowStatus.Borrowing && DateTime.Now > DueDate;
+            return _status == BorrowStatus.Borrowing && DateTime.Now > _dueDate;
         }
 
         public int GetOverdueDays()
         {
             if (!IsOverdue()) return 0;
-            return (DateTime.Now - DueDate).Days;
+            return (DateTime.Now - _dueDate).Days;
         }
 
         public void CompleteReturn()
         {
-            ReturnDate = DateTime.Now;
-            Status = BorrowStatus.Returned;
+            _returnDate = DateTime.Now;
+            _status = BorrowStatus.Returned;
         }
 
         public string GetInfo()
         {
-            return $"RecordId: {RecordId} | Book: {Book.Title} | Reader: {Reader.Name} | Status: {Status}";
+            return $"RecordId: {_recordId} | Book: {_book?.Title} | Reader: {_reader?.Name} | Status: {_status}";
         }
     }
 }

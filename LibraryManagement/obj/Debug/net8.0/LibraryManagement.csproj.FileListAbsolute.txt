@@ -1,0 +1,15 @@
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/bin/Debug/net8.0/LibraryManagement
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/bin/Debug/net8.0/LibraryManagement.deps.json
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/bin/Debug/net8.0/LibraryManagement.runtimeconfig.json
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/bin/Debug/net8.0/LibraryManagement.dll
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/bin/Debug/net8.0/LibraryManagement.pdb
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.GeneratedMSBuildEditorConfig.editorconfig
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.AssemblyInfoInputs.cache
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.AssemblyInfo.cs
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.csproj.CoreCompileInputs.cache
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.sourcelink.json
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.dll
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/refint/LibraryManagement.dll
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.pdb
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/LibraryManagement.genruntimeconfig.cache
+/Users/tieulamdinhquoc/oopp/Group10-main/Group10/LibraryManagement/obj/Debug/net8.0/ref/LibraryManagement.dll
