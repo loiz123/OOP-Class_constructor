@@ -25,11 +25,34 @@ namespace Library_Management.Models
         }
 
         // ===== Properties =====
-        public string FineId => _fineId;
-        public BorrowRecord BorrowRecord => _borrowRecord;
-        public double Amount => _amount;
-        public bool IsPaid => _isPaid;
+        public string FineId
+        {
+            get { return _fineId; }
+            set { _fineId = value; }
+        }
 
+        public BorrowRecord BorrowRecord
+        {
+            get { return _borrowRecord; }
+            set
+            {
+                if (value == null)
+                    throw new ArgumentNullException(nameof(BorrowRecord));
+                _borrowRecord = value;
+            }
+        }
+
+        public double Amount
+        {
+            get { return _amount; }
+            set { _amount = value; }
+        }
+
+        public bool IsPaid
+        {
+            get { return _isPaid; }
+            set { _isPaid = value; }
+        }
         // ===== Logic =====
         public void Calculate()
         {

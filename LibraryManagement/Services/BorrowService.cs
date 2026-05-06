@@ -155,7 +155,6 @@ namespace Library_Management.Services
             return result;
         }
 
-        // ===== NEW METHOD (yêu cầu của Phát) =====
         public List<BorrowRecord> GetRecordsByReader(string readerId)
         {
             if (string.IsNullOrWhiteSpace(readerId))
