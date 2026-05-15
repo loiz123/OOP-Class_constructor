@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Library_Management.Models;
+using Library_Management.Storage;
 
 namespace Library_Management.Services
 {
@@ -11,10 +12,13 @@ namespace Library_Management.Services
     public class BookService : IManageable<Book>
     {
         private List<Book> _books;
-
+       private FileStorage<Book> _storage;
         public BookService()
         {
-            _books = new List<Book>();
+
+
+            _storage = new FileStorage<Book>("data/books.json");
+            _books = _storage.Load();
         }
 
         public void Add(Book item)
@@ -25,6 +29,7 @@ namespace Library_Management.Services
                 return;
             }
             _books.Add(item);
+            _storage.Save(_books);
             Console.WriteLine($"Đã thêm sách: {item.Title}");
         }
 
@@ -37,6 +42,7 @@ namespace Library_Management.Services
                 return;
             }
             _books.Remove(target);
+            _storage.Save(_books);
             Console.WriteLine($"Đã xóa sách: {target.Title}");
         }
 
@@ -63,6 +69,7 @@ namespace Library_Management.Services
                 {
                     _books[i] = updated;
                     Console.WriteLine($"Đã cập nhật sách: {updated.Title}");
+                    _storage.Save(_books);
                     return;
                 }
             }
