@@ -29,7 +29,7 @@ namespace Library_Management.Services
         /// <summary>Xóa bạn đọc theo ID.</summary>
         public void Remove(string id)
         {
-            Reader target = FindById(id);
+            Reader? target = FindById(id);
             if (target == null)
             {
                 Console.WriteLine($"Không tìm thấy bạn đọc với ID '{id}'.");
@@ -40,7 +40,7 @@ namespace Library_Management.Services
         }
 
         /// <summary>Tìm bạn đọc theo ID. Trả về null nếu không có.</summary>
-        public Reader FindById(string id)
+        public Reader? FindById(string id)
         {
             for (int i = 0; i < _readers.Count; i++)
             {
